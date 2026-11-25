@@ -1,0 +1,299 @@
+@import "tailwindcss";
+@config "../tailwind.config.ts";
+
+@theme {
+  --color-swiss-bg: #FAFAF8;
+  --color-swiss-lime: #D1EB8F;
+  --color-swiss-softlime: #EDF6D5;
+  --color-swiss-ink: #111111;
+  --color-swiss-secondary: #626762;
+  --color-swiss-border: #D6D6D2;
+
+  /* Botanical Calm Tokens */
+  --color-botanical-ivory: #F7F7F0;
+  --color-botanical-sage: #DCE8D5;
+  --color-botanical-leaf: #9CBF88;
+  --color-botanical-forest: #244936;
+  --color-botanical-moss: #526B4B;
+  --color-botanical-charcoal: #202820;
+  --color-botanical-stone: #8A9085;
+
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+}
+
+/*
+ * VayuVerse — Modern Swiss Precision tokens
+ * Background: #FAFAF8, Primary: #111111, Accent Lime: #D1EB8F, Soft Lime: #EDF6D5, Border: #D6D6D2, Secondary: #626762
+ */
+:root {
+  --background: 60 14% 98%;        /* #FAFAF8 */
+  --foreground: 0 0% 6.7%;         /* #111111 */
+  --card: 0 0% 100%;               /* Crisp white cards */
+  --card-foreground: 0 0% 6.7%;
+  --primary: 76 68% 74%;           /* #D1EB8F accent lime */
+  --primary-foreground: 0 0% 6.7%; /* Dark text on lime */
+  --secondary: 77 65% 90%;         /* #EDF6D5 soft lime */
+  --secondary-foreground: 0 0% 6.7%;
+  --muted: 60 4% 92%;
+  --muted-foreground: 120 3% 39%;  /* #626762 */
+  --accent: 76 68% 74%;            /* #D1EB8F */
+  --accent-foreground: 0 0% 6.7%;
+  --destructive: 0 65% 48%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 60 3% 83%;             /* #D6D6D2 */
+  --input: 60 3% 83%;
+  --ring: 0 0% 6.7%;
+  --radius: 0.75rem;               /* 12px clean radius */
+}
+
+/* Base reset with delicate hairline borders */
+* {
+  border-color: #D6D6D2;
+}
+
+body {
+  background-color: #FAFAF8;
+  color: #111111;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Bold, modern sans-serif headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  letter-spacing: -0.025em;
+}
+
+/* Editorial Serif for Cinematic Botanical Headlines */
+.font-serif-editorial {
+  font-family: 'Newsreader', 'Instrument Serif', Georgia, Cambria, 'Times New Roman', serif;
+  letter-spacing: -0.015em;
+}
+
+/* Swiss typography utilities */
+.tracking-tight-swiss {
+  letter-spacing: -0.03em;
+}
+
+.hairline-border {
+  border-width: 1px;
+  border-color: #D6D6D2;
+}
+
+.hairline-b {
+  border-bottom: 1px solid #D6D6D2;
+}
+
+.hairline-t {
+  border-top: 1px solid #D6D6D2;
+}
+
+.hairline-r {
+  border-right: 1px solid #D6D6D2;
+}
+
+.hairline-l {
+  border-left: 1px solid #D6D6D2;
+}
+
+/* Minimal shadow for precision design */
+.swiss-shadow {
+  box-shadow: 0 1px 3px 0 rgba(17, 17, 17, 0.04);
+}
+
+/* Subtle focus ring */
+.focus-ring {
+  outline: none;
+  box-shadow: 0 0 0 2px #FAFAF8, 0 0 0 4px #D1EB8F;
+}
+
+/* Botanical Calm & Living Nature animations */
+@keyframes leaf-sway {
+  0%, 100% {
+    transform: rotate(0deg) translateY(0);
+  }
+  50% {
+    transform: rotate(2.5deg) translateY(-3px);
+  }
+}
+
+@keyframes leaf-float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(-1.5deg);
+  }
+}
+
+@keyframes botanical-sunlight {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.04);
+  }
+}
+
+/* Organic tree branch swaying */
+@keyframes sway-master {
+  0% {
+    transform: rotate(0deg) translate3d(0, 0, 0);
+  }
+  100% {
+    transform: rotate(1.8deg) translate3d(3px, -2px, 0);
+  }
+}
+
+@keyframes sway-sub {
+  0% {
+    transform: rotate(0deg) translate3d(0, 0, 0);
+  }
+  100% {
+    transform: rotate(-2.4deg) translate3d(-2px, 2px, 0);
+  }
+}
+
+@keyframes sway-secondary {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(1.5deg) translateY(-2px);
+  }
+}
+
+@keyframes leaf-flutter {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  33% {
+    transform: rotate(2deg) scale(1.02);
+  }
+  66% {
+    transform: rotate(-1.5deg) scale(0.98);
+  }
+  100% {
+    transform: rotate(1deg) scale(1);
+  }
+}
+
+@keyframes sunbeam {
+  0% {
+    opacity: 0.25;
+    transform: rotate(0deg);
+  }
+  100% {
+    opacity: 0.42;
+    transform: rotate(1.2deg);
+  }
+}
+
+/* Flowing air streamlines */
+@keyframes air-flow-1 {
+  0% {
+    stroke-dashoffset: 1000;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes air-flow-2 {
+  0% {
+    stroke-dashoffset: 1000;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes air-flow-3 {
+  0% {
+    stroke-dashoffset: 1000;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Atmospheric falling leaf particles */
+@keyframes leaf-fall {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate3d(320px, 105vh, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes leaf-tumble {
+  0% {
+    transform: rotate(0deg) rotateX(0deg) rotateY(0deg) scale(0.95);
+  }
+  50% {
+    transform: rotate(90deg) rotateX(45deg) rotateY(25deg) scale(1.05);
+  }
+  100% {
+    transform: rotate(180deg) rotateX(-35deg) rotateY(-20deg) scale(0.9);
+  }
+}
+
+/* Soundbar audio equalizer equalizer animation */
+@keyframes soundbar {
+  0%, 100% {
+    height: 4px;
+  }
+  50% {
+    height: 14px;
+  }
+}
+
+.animate-leaf-sway {
+  animation: leaf-sway 7s ease-in-out infinite;
+}
+
+.animate-leaf-float {
+  animation: leaf-float 9s ease-in-out infinite;
+}
+
+.animate-botanical-sunlight {
+  animation: botanical-sunlight 10s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-leaf-sway,
+  .animate-leaf-float,
+  .animate-botanical-sunlight,
+  [class*="animate-[sway-"],
+  [class*="animate-[leaf-"],
+  [class*="animate-[air-"],
+  [class*="animate-[sunbeam"] {
+    animation: none !important;
+  }
+}
