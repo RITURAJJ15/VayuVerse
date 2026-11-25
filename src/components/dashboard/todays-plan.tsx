@@ -93,7 +93,7 @@ export function TodaysPlanCard() {
               planId: matchingPlan.id,
               date: todayStr,
               locationName: snap.cityName || currentLocation.name,
-              overallSeverity: (snap.aqiCategory as ComputedDailyPlan["overallSeverity"]) || "Moderate",
+              overallSeverity: (snap.aqiCategory as ComputedDailyPlan["overallSeverity"]) || "Unavailable",
               dominantPollutant: "PM2.5",
               cleanestWindow: {
                 startHour: "12:00",
@@ -125,7 +125,7 @@ export function TodaysPlanCard() {
                   action: gp.dailyGuidance?.morning || "Keep morning commute protected; use filtered transit where available.",
                   why: gp.recommendations?.[0]?.rationale || "Early morning temperature inversions trap localized particulate matter.",
                   evidence: snap.stationName ? `Station: ${snap.stationName}` : "CAMS Forecast curve",
-                  severity: (snap.aqiCategory as ComputedDailyPlan["overallSeverity"]) || "Moderate",
+                  severity: (snap.aqiCategory as ComputedDailyPlan["overallSeverity"]) || "Unavailable",
                   priority: "High",
                   lifestyleTip: gp.recommendations?.[0]?.action || "Stay in ventilated corridors.",
                   category: "commute",
@@ -147,7 +147,7 @@ export function TodaysPlanCard() {
                   action: gp.dailyGuidance?.evening || "Close windows before dusk; pre-filter sleeping areas with HEPA.",
                   why: gp.recommendations?.[2]?.rationale || "Atmospheric boundary layer descends with evening traffic rush.",
                   evidence: "Nocturnal boundary layer",
-                  severity: (snap.aqiCategory as ComputedDailyPlan["overallSeverity"]) || "Moderate",
+                  severity: (snap.aqiCategory as ComputedDailyPlan["overallSeverity"]) || "Unavailable",
                   priority: "High",
                   lifestyleTip: gp.recommendations?.[2]?.action || "Keep windows sealed.",
                   category: "health_protection",
@@ -286,9 +286,38 @@ export function TodaysPlanCard() {
                 Today's plan
               </h3>
               <span className="sr-only">My Day Planner Preview</span>
-              <span className="text-xs px-2 py-0.5 rounded-full bg-[#EDF6D5] text-[#285A1D] border border-[#D1EB8F] font-semibold">
-                {activePlan?.overallSeverity || "Active"}
-              </span>
+              {cachedPlan ? (
+                <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE] font-semibold inline-flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#2563EB]" />
+                  Cached Plan
+                </span>
+              ) : activePlan?.overallSeverity === "Unavailable" ? (
+                <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#F3F4F6] text-[#4B5563] border border-[#E5E7EB] font-semibold inline-flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#9CA3AF]" />
+                  Data Pending
+                </span>
+              ) : activePlan?.isStationStale ? (
+                <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#FFFBEB] text-[#B45309] border border-[#FDE68A] font-semibold inline-flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#F59E0B]" />
+                  Stale Telemetry
+                </span>
+              ) : activePlan?.isForecastOnly ? (
+                <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#F0FDF4] text-[#166534] border border-[#BBF7D0] font-semibold inline-flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#0284C7]" />
+                  {activePlan.overallSeverity} (Modeled)
+                </span>
+              ) : (
+                <span className={`text-xs px-2.5 py-0.5 rounded-full font-semibold inline-flex items-center gap-1.5 border ${
+                  CPCB_SEVERITY_COLORS[activePlan?.overallSeverity || "Moderate"]?.bg || "bg-[#EDF6D5]"
+                } ${
+                  CPCB_SEVERITY_COLORS[activePlan?.overallSeverity || "Moderate"]?.text || "text-[#285A1D]"
+                } ${
+                  CPCB_SEVERITY_COLORS[activePlan?.overallSeverity || "Moderate"]?.border || "border-[#D1EB8F]"
+                }`}>
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#16A34A] animate-pulse" />
+                  {activePlan?.overallSeverity} (Verified Live)
+                </span>
+              )}
             </div>
             <div className="flex items-center gap-3 text-xs text-[#626762]">
               <span className="flex items-center gap-1 font-medium text-[#111111]">

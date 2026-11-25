@@ -1,12 +1,12 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
-import { ApiHandlerError, withErrorHandler } from "./_lib/errors";
-import { getOpenAQObservations } from "./_lib/openaq";
-import { getOpenMeteoForecast } from "./_lib/forecast";
-import { evaluateAirQualityAlerts } from "../src/lib/alert-engine";
-import type { GeoLocation } from "../src/types/location";
-import type { UserProfile } from "../src/types/profile";
-import type { AirAlert, NotificationPreferences } from "../src/types/alerts";
+import { ApiHandlerError, withErrorHandler } from "./_lib/errors.js";
+import { getOpenAQObservations } from "./_lib/openaq.js";
+import { getOpenMeteoForecast } from "./_lib/forecast.js";
+import { evaluateAirQualityAlerts } from "../src/lib/alert-engine.js";
+import type { GeoLocation } from "../src/types/location.js";
+import type { UserProfile } from "../src/types/profile.js";
+import type { AirAlert, NotificationPreferences } from "../src/types/alerts.js";
 
 const alertEvaluationSchema = z.object({
   location: z.object({

@@ -5,7 +5,7 @@ import type { AirQualityForecastResponse, HourlyForecastPoint } from "@/types/fo
 import {
   getIndianNaqiCategoryFromAqi,
   getIndianNaqiCategoryFromPm25,
-} from "./daily-planning-engine";
+} from "./daily-planning-engine.js";
 import type {
   AirAlert,
   AirAlertType,
@@ -25,6 +25,7 @@ export const DEFAULT_NOTIFICATION_PREFERENCES: NotificationPreferences = {
 };
 
 export const SEVERITY_RANK: Record<AirAlertSeverity, number> = {
+  Unavailable: 0,
   Good: 1,
   Satisfactory: 2,
   Moderate: 3,

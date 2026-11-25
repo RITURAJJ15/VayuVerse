@@ -72,6 +72,13 @@ const SEVERITY_CONFIG: Record<
     badge: "bg-[#2E7D4E] text-white",
     text: "text-[#285A1D]",
   },
+  Unavailable: {
+    borderLeft: "border-l-slate-400",
+    border: "border-slate-200",
+    bg: "bg-slate-50/80",
+    badge: "bg-slate-500 text-white",
+    text: "text-slate-700",
+  },
 };
 
 export function NotificationCenterDrawer({ isOpen, onClose }: NotificationCenterDrawerProps) {

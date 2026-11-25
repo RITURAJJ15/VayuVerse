@@ -11,8 +11,9 @@ export function healthHandler(_req: Request, res: Response) {
   const envStatus = {
     OPENAQ_API_KEY: !!process.env.OPENAQ_API_KEY,
     GEMINI_API_KEY: !!process.env.GEMINI_API_KEY,
-    SUPABASE_URL: !!process.env.SUPABASE_URL,
-    SUPABASE_ANON_KEY: !!process.env.SUPABASE_ANON_KEY,
+    OPENROUTESERVICE_API_KEY: !!process.env.OPENROUTESERVICE_API_KEY,
+    SUPABASE_URL: !!(process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL),
+    SUPABASE_ANON_KEY: !!(process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY),
   };
 
   res.json({

@@ -10,7 +10,7 @@ import type {
   ComputedRoute,
   RouteStep,
   RouteTravelMode,
-} from "../../src/types/routes";
+} from "../../src/types/routes.js";
 
 const ORS_BASE_URL =
   process.env.OPENROUTESERVICE_BASE_URL ||

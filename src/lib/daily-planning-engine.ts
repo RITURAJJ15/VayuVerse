@@ -14,7 +14,8 @@ export type NaqiCategory =
   | "Moderate"
   | "Poor"
   | "Very Poor"
-  | "Severe";
+  | "Severe"
+  | "Unavailable";
 
 export interface CleanestWindowInfo {
   startHour: string;
@@ -80,7 +81,7 @@ export interface ComputedDailyPlan {
  * Maps PM2.5 (24h continuous average) to official Indian CPCB NAQI Category
  */
 export function getIndianNaqiCategoryFromPm25(pm25: number | null | undefined): NaqiCategory {
-  if (pm25 === null || pm25 === undefined || isNaN(pm25)) return "Moderate";
+  if (pm25 === null || pm25 === undefined || isNaN(pm25)) return "Unavailable";
   if (pm25 <= 30) return "Good";
   if (pm25 <= 60) return "Satisfactory";
   if (pm25 <= 90) return "Moderate";
@@ -93,7 +94,7 @@ export function getIndianNaqiCategoryFromPm25(pm25: number | null | undefined): 
  * Maps overall AQI value to official Indian CPCB NAQI Category
  */
 export function getIndianNaqiCategoryFromAqi(aqi: number | null | undefined): NaqiCategory {
-  if (aqi === null || aqi === undefined || isNaN(aqi)) return "Moderate";
+  if (aqi === null || aqi === undefined || isNaN(aqi)) return "Unavailable";
   if (aqi <= 50) return "Good";
   if (aqi <= 100) return "Satisfactory";
   if (aqi <= 200) return "Moderate";
@@ -109,6 +110,7 @@ export const CPCB_SEVERITY_COLORS: Record<NaqiCategory, { bg: string; text: stri
   Poor: { bg: "bg-[#FFF7ED]", text: "text-[#9A3412]", border: "border-[#FFEDD5]", pill: "#C65D28" },
   "Very Poor": { bg: "bg-[#FEF2F2]", text: "text-[#991B1B]", border: "border-[#FECACA]", pill: "#B93838" },
   Severe: { bg: "bg-[#450A0A]/10 text-[#450A0A]", text: "text-[#450A0A]", border: "border-[#7F1D1D]", pill: "#731E1E" },
+  Unavailable: { bg: "bg-[#F3F4F6]", text: "text-[#4B5563]", border: "border-[#E5E7EB]", pill: "#6B7280" },
 };
 
 /**
@@ -264,13 +266,17 @@ export function generateDeterministicDailyPlan(
 
   // Overall day severity calculation:
   // If observed AQI is available, use it; otherwise compute from observed PM2.5 or peak forecast
-  let overallSeverity: NaqiCategory = "Moderate";
+  const isDataUnavailable = observedAqi === null && observedPm25 === null && peakWindow.expectedPm25 === null;
+
+  let overallSeverity: NaqiCategory;
   if (observedAqi !== null) {
     overallSeverity = getIndianNaqiCategoryFromAqi(observedAqi);
   } else if (observedPm25 !== null) {
     overallSeverity = getIndianNaqiCategoryFromPm25(observedPm25);
   } else if (peakWindow.expectedPm25 !== null) {
     overallSeverity = getIndianNaqiCategoryFromPm25(peakWindow.expectedPm25);
+  } else {
+    overallSeverity = "Unavailable";
   }
 
   const isPoorOrWorse =
@@ -326,7 +332,11 @@ export function generateDeterministicDailyPlan(
   let morningWhy: string;
   let morningTip: string;
 
-  if (overallSeverity === "Good" || overallSeverity === "Satisfactory") {
+  if (isDataUnavailable) {
+    morningAction = "Awaiting local air readings; standard indoor daily routine recommended.";
+    morningWhy = "Real-time ground station and forecast streams are currently pending sync for this locality.";
+    morningTip = "Check back shortly or refresh when monitoring connection is active.";
+  } else if (overallSeverity === "Good" || overallSeverity === "Satisfactory") {
     morningAction = "Safe for morning commute, walks, and standard outdoor activities.";
     morningWhy = `Air quality is ${overallSeverity} (${evidenceObs}). Surface boundary conditions allow comfortable outdoor movement.`;
     morningTip = profile.category === "college_student"
@@ -364,7 +374,11 @@ export function generateDeterministicDailyPlan(
   let afternoonWhy: string;
   let afternoonTip: string;
 
-  if (cleanestWindow.isAfternoonCleanest && !isPoorOrWorse) {
+  if (isDataUnavailable) {
+    afternoonAction = "Maintain standard indoor routines; verify local readings before intense workouts.";
+    afternoonWhy = "Midday solar boundary-layer status pending live atmospheric observation sync.";
+    afternoonTip = "Check back once monitoring station link is updated.";
+  } else if (cleanestWindow.isAfternoonCleanest && !isPoorOrWorse) {
     afternoonAction = `Best window for necessary outdoor errands and 20-min cross-ventilation (${cleanestWindow.label}).`;
     afternoonWhy = `Solar heating expands the convective boundary-layer mixing height, diluting ground particulate density (${cleanestWindow.expectedPm25Range}).`;
     afternoonTip = "Open opposite windows for 15-20 minutes to purge indoor carbon dioxide without heavy particulate ingress.";
@@ -383,7 +397,11 @@ export function generateDeterministicDailyPlan(
   let eveningWhy: string;
   let eveningTip: string;
 
-  if (isPoorOrWorse) {
+  if (isDataUnavailable) {
+    eveningAction = "Standard evening routine; minimize unnecessary exposure along heavy traffic corridors.";
+    eveningWhy = "Nocturnal particulate dispersion conditions pending verified sensor telemetry.";
+    eveningTip = "Keep bedroom windows closed and operate indoor filtration if available.";
+  } else if (isPoorOrWorse) {
     eveningAction = "Close and seal all windows before dusk (17:30). Pre-filter bedroom 1 hour prior to sleep.";
     eveningWhy = `Cooling evening temperatures trigger boundary-layer descent and traffic exhaust trapping (${peakWindow.label}).`;
     eveningTip = profile.purifierAvailability !== "none"
@@ -419,9 +437,9 @@ export function generateDeterministicDailyPlan(
         timeWindow: morningWindow,
         action: morningAction,
         why: morningWhy,
-        evidence: evidenceObs,
+        evidence: isDataUnavailable ? "Pending sensor sync" : evidenceObs,
         severity: overallSeverity,
-        priority: basePriority,
+        priority: isDataUnavailable ? "Low" : basePriority,
         lifestyleTip: morningTip,
         category: "outdoor",
       },
@@ -430,9 +448,9 @@ export function generateDeterministicDailyPlan(
         timeWindow: afternoonWindow,
         action: afternoonAction,
         why: afternoonWhy,
-        evidence: `Forecast Window: ${cleanestWindow.label}`,
-        severity: cleanestWindow.isAfternoonCleanest && !isPoorOrWorse ? "Satisfactory" : overallSeverity,
-        priority: cleanestWindow.isAfternoonCleanest ? "Moderate" : basePriority,
+        evidence: isDataUnavailable ? "Pending forecast sync" : `Forecast Window: ${cleanestWindow.label}`,
+        severity: isDataUnavailable ? "Unavailable" : cleanestWindow.isAfternoonCleanest && !isPoorOrWorse ? "Satisfactory" : overallSeverity,
+        priority: isDataUnavailable ? "Low" : cleanestWindow.isAfternoonCleanest ? "Moderate" : basePriority,
         lifestyleTip: afternoonTip,
         category: "indoor",
       },
@@ -441,9 +459,9 @@ export function generateDeterministicDailyPlan(
         timeWindow: eveningWindow,
         action: eveningAction,
         why: eveningWhy,
-        evidence: `Peak Inversion: ${peakWindow.label}`,
-        severity: isPoorOrWorse ? "Very Poor" : overallSeverity,
-        priority: isPoorOrWorse ? "Critical" : basePriority,
+        evidence: isDataUnavailable ? "Pending telemetry" : `Peak Inversion: ${peakWindow.label}`,
+        severity: isDataUnavailable ? "Unavailable" : isPoorOrWorse ? "Very Poor" : overallSeverity,
+        priority: isDataUnavailable ? "Low" : isPoorOrWorse ? "Critical" : basePriority,
         lifestyleTip: eveningTip,
         category: "health_protection",
       },

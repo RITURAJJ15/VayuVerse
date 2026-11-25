@@ -1,14 +1,14 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
-import { ApiHandlerError, withErrorHandler } from "./_lib/errors";
-import { getOpenAQObservations } from "./_lib/openaq";
-import { getOpenMeteoForecast } from "./_lib/forecast";
-import { evaluateDeterministicRules } from "./_lib/rules-engine";
-import { generateGeminiDayPlan } from "./_lib/gemini";
-import type { StationObservationResponse } from "../src/types/air-quality";
-import type { AirQualityForecastResponse } from "../src/types/forecast";
-import type { UserProfile } from "../src/types/profile";
-import type { GeoLocation } from "../src/types/location";
+import { ApiHandlerError, withErrorHandler } from "./_lib/errors.js";
+import { getOpenAQObservations } from "./_lib/openaq.js";
+import { getOpenMeteoForecast } from "./_lib/forecast.js";
+import { evaluateDeterministicRules } from "./_lib/rules-engine.js";
+import { generateGeminiDayPlan } from "./_lib/gemini.js";
+import type { StationObservationResponse } from "../src/types/air-quality.js";
+import type { AirQualityForecastResponse } from "../src/types/forecast.js";
+import type { UserProfile } from "../src/types/profile.js";
+import type { GeoLocation } from "../src/types/location.js";
 
 const recommendationRequestSchema = z.object({
   location: z.object({

@@ -4,7 +4,7 @@ import {
   type DayPlanResponse,
   type DeterministicRulesResult,
   type DayPlanSection,
-} from "../../src/types/recommendations";
+} from "../../src/types/recommendations.js";
 
 const DEFAULT_API_KEY = process.env.GEMINI_API_KEY || "";
 

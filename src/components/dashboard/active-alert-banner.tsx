@@ -49,6 +49,12 @@ const BANNER_THEMES: Record<
     titleColor: "text-[#285A1D]",
     accent: "text-[#285A1D]",
   },
+  Unavailable: {
+    wrapper: "bg-slate-100 border-slate-300 text-slate-700",
+    badge: "bg-slate-500 text-white",
+    titleColor: "text-slate-800",
+    accent: "text-slate-600",
+  },
 };
 
 export function ActiveAlertBanner() {

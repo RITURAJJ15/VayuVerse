@@ -1,5 +1,5 @@
 import dns from "node:dns";
-import { ApiHandlerError } from "./errors";
+import { ApiHandlerError } from "./errors.js";
 import type {
   AirQualityForecastResponse,
   DayForecastSummary,
@@ -7,7 +7,7 @@ import type {
   DiurnalTimeWindow,
   DispersionStatus,
   DiurnalWindowSummary,
-} from "../../src/types/forecast";
+} from "../../src/types/forecast.js";
 
 // Ensure IPv4 first on Node.js to prevent IPv6 timeout on Windows
 try {

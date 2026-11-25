@@ -1,12 +1,12 @@
-import type { GeoLocation } from "../../src/types/location";
-import type { UserProfile } from "../../src/types/profile";
-import type { StationObservationResponse } from "../../src/types/air-quality";
-import type { AirQualityForecastResponse } from "../../src/types/forecast";
+import type { GeoLocation } from "../../src/types/location.js";
+import type { UserProfile } from "../../src/types/profile.js";
+import type { StationObservationResponse } from "../../src/types/air-quality.js";
+import type { AirQualityForecastResponse } from "../../src/types/forecast.js";
 import type {
   DeterministicRulesResult,
   DayPlanResponse,
   RecommendationAction,
-} from "../../src/types/recommendations";
+} from "../../src/types/recommendations.js";
 
 /**
  * Evaluates deterministic environmental safety constraints and builds

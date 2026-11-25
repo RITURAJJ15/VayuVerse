@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { computeOpenRouteServiceRoutes } from "./_lib/openrouteservice.js";
-import type { ComputeRoutesRequest } from "../src/types/routes";
+import type { ComputeRoutesRequest } from "../src/types/routes.js";
 
 export async function routesHandler(req: Request, res: Response) {
   // Set JSON content type
@@ -61,4 +61,9 @@ export async function routesHandler(req: Request, res: Response) {
       error: message,
     });
   }
+}
+
+// Vercel serverless default export
+export default async function handler(req: Request, res: Response) {
+  return routesHandler(req, res);
 }

@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
-import { airQualityQuerySchema } from "./_lib/validation";
-import { getOpenMeteoForecast } from "./_lib/forecast";
-import { ApiHandlerError, withErrorHandler } from "./_lib/errors";
+import { airQualityQuerySchema } from "./_lib/validation.js";
+import { getOpenMeteoForecast } from "./_lib/forecast.js";
+import { ApiHandlerError, withErrorHandler } from "./_lib/errors.js";
 
 export const forecastHandler = withErrorHandler(async (req: Request, res: Response) => {
   const parsed = airQualityQuerySchema.safeParse(req.query);

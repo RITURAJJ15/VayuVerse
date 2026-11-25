@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
-import { airQualityQuerySchema } from "./_lib/validation";
-import { getOpenAQObservations } from "./_lib/openaq";
-import { ApiHandlerError, withErrorHandler } from "./_lib/errors";
+import { airQualityQuerySchema } from "./_lib/validation.js";
+import { getOpenAQObservations } from "./_lib/openaq.js";
+import { ApiHandlerError, withErrorHandler } from "./_lib/errors.js";
 
 export const airQualityHandler = withErrorHandler(async (req: Request, res: Response) => {
   const parsed = airQualityQuerySchema.safeParse(req.query);

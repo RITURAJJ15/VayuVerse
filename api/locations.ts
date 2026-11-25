@@ -1,11 +1,17 @@
 import type { Request, Response } from "express";
-import { locationSearchQuerySchema } from "./_lib/validation";
-import { searchIndianLocations, reverseGeocodeCoordinates } from "./_lib/open-meteo";
-import { ApiHandlerError, withErrorHandler } from "./_lib/errors";
+import { locationSearchQuerySchema } from "./_lib/validation.js";
+import { searchIndianLocations, reverseGeocodeCoordinates } from "./_lib/open-meteo.js";
+import { ApiHandlerError, withErrorHandler } from "./_lib/errors.js";
 
 export const locationsHandler = withErrorHandler(async (req: Request, res: Response) => {
+  // Normalize ?q= and ?query= for client compatibility
+  const normalizedQuery = {
+    ...req.query,
+    query: req.query.query || req.query.q,
+  };
+
   // Validate query parameters using Zod
-  const parsed = locationSearchQuerySchema.safeParse(req.query);
+  const parsed = locationSearchQuerySchema.safeParse(normalizedQuery);
 
   if (!parsed.success) {
     const issue = parsed.error.issues[0]?.message || "Invalid location search parameters";

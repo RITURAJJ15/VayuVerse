@@ -1,5 +1,5 @@
 import dns from "node:dns";
-import { ApiHandlerError } from "./errors";
+import { ApiHandlerError } from "./errors.js";
 
 // Ensure IPv4 first on Node.js to prevent IPv6 connect timeout on Windows
 try {

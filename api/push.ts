@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
-import { ApiHandlerError, withErrorHandler } from "./_lib/errors";
+import { ApiHandlerError, withErrorHandler } from "./_lib/errors.js";
 
 /**
  * Push Subscription Endpoint
